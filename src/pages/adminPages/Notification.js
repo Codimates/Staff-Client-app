@@ -8,18 +8,20 @@ function Notification() {
   useEffect(() => {
     const socket = io("http://localhost:4004");
 
+    const email = JSON.parse(localStorage.getItem("user")).Email;
     // Send event to request notifications
-    socket.emit("Registernotifyget");
+    socket.emit("Registernotifyget" ,{email});
 
     // Listen for notifications
     socket.on("getNotifications", (data) => {
-      console.log("Received Notifications:", data); // Debugging: Log received data
       if (data.notifications) {
         setNotifications(data.notifications); // Extract and set notifications array
       } else {
         console.error("Invalid data format:", data);
       }
     });
+
+    // localStorage.setItem("user", JSON.stringify(userData));
 
     // Listen for errors
     socket.on("getNotificationsError", (err) => {
@@ -32,6 +34,25 @@ function Notification() {
     };
   }, []);
 
+  const handelviewed = (id) => {
+    const socket = io("http://localhost:4004");
+
+    const email = JSON.parse(localStorage.getItem("user")).Email;
+    console.log(email, id);
+
+    const data = { email, id };
+
+    socket.emit("viewed", data);
+
+    socket.on("viewedSuccess", (response) => {
+      window.alert(response.message);
+    });
+
+    socket.on("viewedError", (err) => {
+      console.error(err.message);
+    });
+  };
+
   return (
     <div>
       <h1>Notifications</h1>
@@ -39,7 +60,15 @@ function Notification() {
       {notifications.length > 0 ? (
         <ul>
           {notifications.map((notification, index) => (
-            <li key={index}>{notification.message}</li> // Display notification message
+            <li key={index}>
+              {notification.message}{" "}
+              <button
+                className="bg-slate-500 p-2 rounded-md"
+                onClick={() => handelviewed(notification._id)}
+              >
+                Hellow
+              </button>
+            </li>
           ))}
         </ul>
       ) : (
