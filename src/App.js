@@ -12,6 +12,9 @@ import InventoryManagerLanding from './pages/inventorymanager/InventoryManagerLa
 import SalesManagerLanding from './pages/salesmanager/SalesManagerLanding';
 import ProtectedRoute from './protectedRouters/ProtectedRoute';
 import Notifacition from './pages/adminPages/Notification'
+import Inventory from './pages/inventorymanager/Inventory';
+import Profile from './pages/inventorymanager/Profile';
+
 
 
 axios.defaults.baseURL = 'http://localhost:4000';
@@ -30,7 +33,10 @@ function App() {
           <Route path='/admindash' element={<ProtectedRoute><Adminlanding/></ProtectedRoute>}/>
           <Route path='/Notifacition' element={<Notifacition/>}/>
           <Route path='/inventorymanagerdash' element={<ProtectedRoute><InventoryManagerLanding/></ProtectedRoute>}/>   
+          <Route path='/inventory' element={<ProtectedRoute><Inventory/></ProtectedRoute>}></Route>
+          <Route path='/my-profile' element={<ProtectedRoute><Profile/></ProtectedRoute>}></Route>
           <Route path='/salesmanagerdash' element={<ProtectedRoute><SalesManagerLanding/></ProtectedRoute>}/>    
+      
         </Routes>
         </UserContextProvider>
       </BrowserRouter>
