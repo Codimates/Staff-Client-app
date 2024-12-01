@@ -11,10 +11,9 @@ const InventoryList = () => {
   const [inventories, setInventories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [ setIsViewModalOpen]=useState(false);
-  const [setSelectedInventory]=useState(null);
+  const [selectedInventory,setSelectedInventory]=useState(null);
   const [viewMode, setViewMode] = useState('desktop');
- 
+
 
   // Responsive view mode detection
   useEffect(() => {
@@ -47,22 +46,7 @@ const InventoryList = () => {
     setIsModalOpen(false);
   };
 
-  // New method to handle view functionality
-  const handleViewInventory = async (inventoryId) => {
-    try {
-      const response = await axios.get(`/inventory/getbyid/${inventoryId}`);
-      setSelectedInventory(response.data);
-      setIsViewModalOpen(true);
-    } catch (error) {
-      console.error("Failed to fetch inventory details:", error);
-      // Optional: Add user-friendly error handling
-    }
-  };
-
-  // const closeViewModal = () => {
-  //   setIsViewModalOpen(false);
-  //   setSelectedInventory(null);
-  // };
+  
 
   // Fetch inventory data
   useEffect(() => {
@@ -71,8 +55,7 @@ const InventoryList = () => {
         setIsLoading(true);
         const response = await axios.get('/inventory/getalllaps');
         setInventories(response.data);
-        setSelectedInventory(response.data);
-        setIsViewModalOpen(true);
+        
       } catch (error) {
         console.error("Failed to fetch inventory data:", error);
       } finally {
@@ -81,7 +64,21 @@ const InventoryList = () => {
     };
 
     fetchInventory();
-  }, [setSelectedInventory, setIsViewModalOpen]);
+  }, []);
+
+  // Handler to view details of a specific inventory item
+  const handleViewDetails = async (inventoryItem) => {
+    try {
+      // If you need to fetch additional details, uncomment and modify this
+      // const response = await axios.get(`/inventory/getbyid/${inventoryItem.inventory_id}`);
+      // setSelectedInventory(response.data);
+      
+      // If you want to show details directly from the list item
+      setSelectedInventory(inventoryItem);
+    } catch (error) {
+      console.error("Failed to fetch inventory details:", error);
+    }
+  };
 
 
    // Tablet View Rendering (New)
@@ -101,7 +98,7 @@ const InventoryList = () => {
               <div className="flex space-x-2">
               <button 
                 className="text-blue-600 hover:text-blue-900"
-                onClick={() => handleViewInventory(inventory.inventory_id)}
+                onClick={() => handleViewDetails(inventory)}
               >
                 <FiEye className="h-4 w-4" />
               </button>
@@ -165,7 +162,7 @@ const InventoryList = () => {
               <div className="flex space-x-2">
               <button 
                 className="text-blue-600 hover:text-blue-900"
-                onClick={() => handleViewInventory(inventory.inventory_id)}
+                onClick={() => handleViewDetails(inventory)}
               >
                 <FiEye className="h-4 w-4" />
               </button>
@@ -288,7 +285,7 @@ const InventoryList = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
 
                       <button className="text-blue-600 hover:text-blue-900 mr-4"
-                            onClick={() => handleViewInventory(inventory.inventory_id)}
+                            onClick={() => handleViewDetails(inventory)}
                   >
                     <FiEye className="h-4 w-4" />
                   </button>
@@ -385,6 +382,30 @@ const InventoryList = () => {
             </div>
           </div>
         )}
+
+        {/* Detailed View */}
+        {selectedInventory && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="relative w-full max-w-md p-6 bg-white rounded-lg shadow-xl">
+      <h2 className="text-2xl font-bold mb-4">Inventory Details</h2>
+      <div className="space-y-2">
+        <p><strong>Inventory ID:</strong> {selectedInventory.inventory_id}</p>
+        <p><strong>Product ID:</strong> {selectedInventory.product_id}</p>
+        <p><strong>Model Name:</strong> {selectedInventory.model_name}</p>
+        <p><strong>Brand Name:</strong> {selectedInventory.brand_name}</p>
+        <p><strong>RAM:</strong> {selectedInventory.ram} GB</p>
+        <p><strong>Price:</strong> ${parseFloat(selectedInventory.price).toFixed(2)}</p>
+        <p><strong>Stock Level:</strong> {selectedInventory.stock_level} units</p>
+      </div>
+      <button 
+        onClick={() => setSelectedInventory(null)}
+        className="mt-4 w-full py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
 
         
       </div>
