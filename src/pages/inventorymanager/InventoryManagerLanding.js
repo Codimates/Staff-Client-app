@@ -1,14 +1,18 @@
 import React from 'react'
-import AddInventory from '../../componnets/inventorycompo/AddInventory'
-import AddBrands from '../../componnets/inventorycompo/AddBrands'
+import Header from '../../componnets/inventorycompo/Header'
+import NavBar from '../../componnets/inventorycompo/NavBar'
 
 export default function InventoryManagerLanding() {
   
   return (
     <div>
-      <h1>im</h1>
-      <AddInventory/>
-      <AddBrands/>
+     
+      <Header/>
+      <div className='mt-0 text-left ml-8'>
+      <NavBar/>
+      </div>
+     
+      
     </div>
   )
 }
