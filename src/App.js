@@ -32,9 +32,11 @@ function App() {
 
           <Route path='/admindash' element={<ProtectedRoute><Adminlanding/></ProtectedRoute>}/>
           <Route path='/Notifacition' element={<Notifacition/>}/>
+          
           <Route path='/inventorymanagerdash' element={<ProtectedRoute><InventoryManagerLanding/></ProtectedRoute>}/>   
           <Route path='/inventory' element={<ProtectedRoute><Inventory/></ProtectedRoute>}></Route>
           <Route path='/my-profile' element={<ProtectedRoute><Profile/></ProtectedRoute>}></Route>
+          
           <Route path='/salesmanagerdash' element={<ProtectedRoute><SalesManagerLanding/></ProtectedRoute>}/>    
       
         </Routes>
